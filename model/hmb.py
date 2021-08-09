@@ -3,7 +3,7 @@
 '''
 Author: wjm
 Date: 2020-11-25 00:34:50
-LastEditTime: 2021-05-31 14:58:29
+LastEditTime: 2021-08-09 21:12:15
 Description: file content
 '''
 import os
@@ -116,7 +116,7 @@ class Net(nn.Module):
         rm_s2_3 = hp_pan_2 + self.rm1(torch.cat([torch.unsqueeze(s2[:,3,:,:],1), lr_pan], 1)) * hp_pan_2
         rm_s2_pan = torch.cat([rm_s2_0, rm_s2_1, rm_s2_2, rm_s2_3], 1)
         
-        s2 = s2 + F.interpolate(l_ms, scale_factor=2, mode='bicubic') + hp_pan_2
+        s2 = s2 + F.interpolate(l_ms, scale_factor=2, mode='bicubic') + rm_s2_pan
         
         s3 = self.res_block_s3(s2) + b_ms
 
@@ -129,7 +129,7 @@ class Net(nn.Module):
         rm_s4_3 = hp_pan_4 + self.rm2(torch.cat([torch.unsqueeze(s4[:,3,:,:],1), x_pan], 1)) * hp_pan_4
         rm_s4_pan = torch.cat([rm_s4_0, rm_s4_1, rm_s4_2, rm_s4_3], 1)
         
-        s4 = s4 + b_ms + hp_pan_4 
+        s4 = s4 + b_ms + rm_s4_pan 
 
         return s4
         
